@@ -1,279 +1,89 @@
-Idle Business Game – Full Development Plan
+# Idle Business Game – Development Plan
 
-A concise, step-by-step roadmap for building a zero-install, browser-based idle business simulation with optional 3D support. Each section lists the tools, libraries, and links to official documentation.
+**A zero-install browser-based idle simulation—from a humble startup to an AI-powered corporate empire.**
 
-1. Vision & Scope
+---
 
-Genre: Idle / Incremental simulation with dynamic AI-driven actors.
+## 1. Executive Summary
 
-View: 2D isometric or light 3D.
+Players begin with a single resource node and expand automated production chains, optimize workflows, and interact with optional AI-driven actors—all in-browser with no downloads or installations required.
 
-Platform: Browser (HTML5/WebGL) — no downloads required.
+## 2. Tech Stack & Engine
 
-Gameplay Loop: Build factories → automate resource flows → optimize upgrades → compete/cooperate with AI.
+| Option            | Use Case                     | Runtime Size | Docs                                                                                                                                   |
+| ----------------- | ---------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **Three.js**      | 3D/WebGL isometric prototype | \~2 MB       | [https://threejs.org/docs/#manual/en/introduction/Creating-a-scene](https://threejs.org/docs/#manual/en/introduction/Creating-a-scene) |
+| **Babylon.js**    | 3D + physics                 | \~3 MB       | [https://doc.babylonjs.com/](https://doc.babylonjs.com/)                                                                               |
+| **Phaser**        | 2D/isometric fallback        | \~2 MB       | [https://phaser.io/docs](https://phaser.io/docs)                                                                                       |
+| **PlayCanvas**    | Full 3D in-browser editor    | \~5 MB       | [https://developer.playcanvas.com/](https://developer.playcanvas.com/)                                                                 |
+| **Godot (HTML5)** | C#/GDScript reuse via WASM   | 15–25 MB     | [https://docs.godotengine.org/en/stable/export/web.html](https://docs.godotengine.org/en/stable/export/web.html)                       |
 
-Accessibility: Free, no ads, no installs.
+**Recommendation:** Prototype in **Three.js** or **Babylon.js** for 3D isometric; fallback to **Phaser** for pure 2D.
 
-2. Tech Stack & Engine
+## 3. Art & Visuals
 
-Option
+* **Style:** Low-poly + pixel-art hybrid
+* **Tools:** Aseprite, TexturePacker, Tiled Map Editor
+* **Pipeline:** Sprite atlas generation, 9-slice UI panels, dynamic color tinting for factions
 
-Use Case
+## 4. Core Mechanics
 
-Runtime Size
+1. **Production Chains:** Resource node → processing buildings → storage → final products
+2. **Idle Income:** Base yield/sec boosted by upgrades, AI events, and milestones
+3. **Upgrades & Research:** Tech tree unlocking new buildings, automation tiers, and cosmetics
+4. **Events & RNG:** Market shifts, resource booms, random AI interactions
 
-Docs
+## 5. AI & Behavior (Opt-In)
 
-PlayCanvas
+| Module               | Library        | Payload | Docs                                                                                                       |
+| -------------------- | -------------- | ------- | ---------------------------------------------------------------------------------------------------------- |
+| **Behavior Trees**   | Behavior3JS    | 0.1 MB  | [https://github.com/behavior3/behavior3js](https://github.com/behavior3/behavior3js)                       |
+| **Rule-Based Logic** | PathFinding.js | 0.05 MB | [https://github.com/qiao/PathFinding.js](https://github.com/qiao/PathFinding.js)                           |
+| **ML Inference**     | TensorFlow\.js | 3–5 MB  | [https://www.tensorflow.org/js](https://www.tensorflow.org/js)                                             |
+|                      | ONNX.js        | 2 MB    | [https://github.com/microsoft/onnxjs](https://github.com/microsoft/onnxjs)                                 |
+| **Server-Side AI**   | Node.js/Python | N/A     | [https://nodejs.org/](https://nodejs.org/), [https://fastapi.tiangolo.com/](https://fastapi.tiangolo.com/) |
 
-Full 3D with in-browser editor
+* **Toggle:** Players can enable/disable AI modules; default fallback to finite state machines
+* **Execution:** Run AI in Web Workers; inference offline or via lightweight REST calls
 
-~5 MB
+## 6. Architecture & Data
 
-https://developer.playcanvas.com/
+* **Entities:** JSON-driven definitions for buildings, resources, and AI behaviors
+* **State Management:** Redux or simple Pub/Sub pattern
+* **Persistence:** IndexedDB via LocalForage or LocalStorage
+* **Serialization:** JSON.stringify / JSON.parse
 
-Three.js
+## 7. UI/UX & Audio
 
-Custom 3D/WebGL scenes
+* **Viewport:** Click-to-build, drag-to-pan, zoom controls, optional grid overlay
+* **Panels:** Sidebar build menu, bottom resource bar, pop-up dialogs for events
+* **Audio:** Howler.js for SFX, Tone.js for ambient loops
 
-~2 MB
+## 8. Networking & Multiplayer (Optional)
 
-https://threejs.org/docs/#manual/en/introduction/Creating-a-scene
+* **Leaderboards:** RESTful API endpoints
+* **Asynchronous PvP:** Socket.io or Colyseus
+* **Cloud Saves:** Optional sync via GitHub Pages or simple serverless function
 
-Babylon.js
+## 9. Testing & QA
 
-Game framework + physics
+* **Unit Tests:** Jest for core logic modules
+* **Integration Tests:** Playwright for end-to-end UI flows
+* **Performance Audits:** Lighthouse and Chrome DevTools profiler
+* **Simulation Scripts:** Headless idle sessions to detect memory leaks
 
-~3 MB
+## 10. Free Libraries & Tools
 
-https://doc.babylonjs.com/
+* **Graphics:** Three.js, Babylon.js, Phaser, PlayCanvas, Godot (HTML5 export)
+* **Physics:** Cannon.js, Ammo.js
+* **UI Debug:** dat.GUI, Tweakpane
+* **AI:** Behavior3JS, PathFinding.js, TensorFlow\.js, ONNX.js
+* **Audio:** Howler.js, Tone.js
+* **Networking:** Socket.io, Colyseus
+* **State:** Redux, MobX, LocalForage
+* **Testing:** Jest, Playwright, Lighthouse
+* **Editors:** VSCode, Aseprite, TexturePacker, Tiled Map Editor
 
-Phaser
+## 11. My Perspective
 
-2D/isometric prototype
-
-~2 MB
-
-https://phaser.io/docs
-
-Godot (HTML5)
-
-C#/GDScript reuse, WebAssembly
-
-15–25 MB
-
-https://docs.godotengine.org/en/stable/getting_started/workflow/export/exporting_for_web.html
-
-Recommendation: MVP in Three.js or Babylon.js for 3D iso; fallback to Phaser for pure 2D. Reserve Godot for later port.
-
-Build & Delivery
-
-Language: TypeScript — https://www.typescriptlang.org/docs/
-
-Bundler: Webpack (https://webpack.js.org/concepts/) or Rollup (https://rollupjs.org/guide/en/)
-
-Hosting: HTTPS + CDN, SRI (https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity)
-
-CI: GitHub Actions — https://docs.github.com/en/actions
-
-3. Art & Visuals
-
-Style: Low-poly + isometric pixel-art.
-
-Pipeline: Texture atlases, sprite sheets.
-
-Tools: Aseprite or Photoshop; export via TexturePacker.
-
-Animation: CSS sprites or skeletal (Spine/Lottie optional).
-
-4. Core Mechanics
-
-Production Chains: Nodes → processors → storage → output.
-
-Idle Economy: per-second yields, compounded by upgrades.
-
-Upgrades & Research: Unlock new buildings, automation tiers.
-
-Events & RNG: Market shifts, resource booms.
-
-AI Actors: Controlled via opt-in modules (see §5).
-
-5. AI & Behavior System (Opt-In)
-
-Module
-
-Library
-
-Payload
-
-Docs
-
-Behavior Trees
-
-Behavior3JS
-
-<0.1 MB
-
-https://github.com/behavior3/behavior3js
-
-Rule-Based / Pathfinding
-
-PathFinding.js
-
-<0.05 MB
-
-https://github.com/qiao/PathFinding.js
-
-ML Inference
-
-TensorFlow.js
-
-3–5 MB
-
-https://www.tensorflow.org/js
-
-
-
-ONNX.js
-
-~2 MB
-
-https://github.com/microsoft/onnxjs
-
-Server-Side AI (Opt.)
-
-Node.js + Python (Flask/FastAPI)
-
-N/A
-
-https://docs.python.org/3/, https://nodejs.org/en/docs/
-
-Toggle: Player can enable/disable AI. If disabled, fallback to FSM.
-
-Execution: Run Behavior3JS/PathFinding in a Web Worker.
-
-Training: Offline only; inference client-side or via REST (latency 100–200 ms).
-
-6. Architecture & Data
-
-Entities: JSON files defining buildings, stats.
-
-State Management: Redux or simple Pub/Sub.
-
-Persistence: IndexedDB (https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) or LocalStorage.
-
-Serialization: JSON.stringify / JSON.parse.
-
-7. UI/UX Design
-
-Viewport: Pan/zoom, grid toggle.
-
-Menus: Sidebar for build, bottom bar for resources.
-
-Controls: Click to build/upgrade, drag to pan.
-
-Feedback: Toast notifications, progress bars.
-
-8. Audio & Feedback
-
-SFX: Web Audio API — https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API
-
-Music: Looping tracks (OGG/MP3).
-
-9. Testing & QA
-
-Unit: Jest (https://jestjs.io/)
-
-Integration: Playwright (https://playwright.dev/)
-
-Performance: Lighthouse (https://developers.google.com/web/tools/lighthouse)
-
-Automated Idle Runs: Scripts simulating long play.
-
-10. Deployment & Updates
-
-Hosting: Netlify / Vercel for static assets.
-
-Versioning: Git tags, semantic versioning.
-
-Release Cycle: Bi-weekly feature sprints.
-
-11. Resources & Libraries
-
-Engine & Graphics
-
-PlayCanvas (WebGL) — https://developer.playcanvas.com/
-
-Three.js (3D/WebGL) — https://threejs.org/docs/
-
-Babylon.js (3D + physics) — https://doc.babylonjs.com/
-
-Phaser (2D/isometric) — https://phaser.io/docs
-
-Pixi.js (2D rendering) — https://pixijs.com/
-
-AI & Behavior
-
-Behavior3JS (Behavior Trees) — https://github.com/behavior3/behavior3js
-
-PathFinding.js (Navigation) — https://github.com/qiao/PathFinding.js
-
-TensorFlow.js (ML inference) — https://www.tensorflow.org/js
-
-ONNX.js (ML inference) — https://github.com/microsoft/onnxjs
-
-Physics & Collision
-
-Cannon.js — https://github.com/schteppe/cannon.js
-
-Ammo.js — https://github.com/kripken/ammo.js
-
-UI & Debug
-
-dat.GUI — https://github.com/dataarts/dat.gui
-
-Tweakpane — https://github.com/cocopon/tweakpane
-
-ImGui-js — https://github.com/flyover/imgui-js
-
-Audio
-
-Howler.js — https://howlerjs.com/
-
-Tone.js — https://tonejs.github.io/
-
-Networking & Multiplayer
-
-Socket.io — https://socket.io/docs/
-
-Colyseus (Multiplayer framework) — https://colyseus.io/
-
-Data & State
-
-Redux — https://redux.js.org/
-
-MobX — https://mobx.js.org/
-
-LocalForage (IndexedDB wrapper) — https://github.com/localForage/localForage
-
-Testing & QA
-
-Jest — https://jestjs.io/
-
-Playwright — https://playwright.dev/
-
-Lighthouse — https://developers.google.com/web/tools/lighthouse
-
-Tools & Editors
-
-Aseprite (Pixel art) — https://www.aseprite.org/
-
-TexturePacker — https://www.codeandweb.com/texturepacker
-
-Tiled Map Editor — https://www.mapeditor.org/
-
-Visual Studio Code — https://code.visualstudio.com/
-
-12. My Perspective
-
-I believe this fully zero-install, modular approach is ideal for maximizing reach and lowering friction—players jump straight into the game with a single click. By selecting only free, open-source libraries under permissive licenses, you keep costs at zero and maintain full control over every aspect. The opt-in AI ensures lightweight performance for everyone, while advanced users can toggle on richer simulations. The extensive list above gives you every tool needed for graphics, physics, UI, networking, audio, and more. With this foundation, you’ll rapidly prototype, iterate, and deploy across browsers—no downloads, no barriers, pure engagement.
+This modular, zero-install architecture maximizes accessibility—players dive in instantly without downloads. Every tool listed is free and open-source, ensuring zero cost. The opt-in AI approach keeps the core lightweight while offering advanced simulation as an addon.
